@@ -75,7 +75,7 @@ else
 		echo -e "$current_password\n" | sudo -S efibootmgr -b $rEFInd_boot -B &> /dev/null
 	done
 	echo -e "$current_password\n" | sudo -S systemctl disable bootnext-refind.service &> /dev/null
-	echo -e "$current_password\n" | sudo -S rm -rf /esp/efi/refind &> /dev/null
+	echo -e "$current_password\n" | sudo -S rm -rf /boot/efi/EFI/refind &> /dev/null
 	echo -e "$current_password\n" | sudo -S rm /etc/systemd/system/bootnext-refind.service &> /dev/null
 	rm -rf ~/.SteamDeck_rEFInd &> /dev/null
 
@@ -114,9 +114,9 @@ else
 fi
 
 # copy Clover files to EFI system partition
-echo -e "$current_password\n" | sudo -S cp -Rf ~/temp-clover/efi/clover /esp/efi/
-echo -e "$current_password\n" | sudo -S cp custom/config.plist /esp/efi/clover/config.plist 
-echo -e "$current_password\n" | sudo -S cp -Rf custom/themes/* /esp/efi/clover/themes
+echo -e "$current_password\n" | sudo -S cp -Rf ~/temp-clover/efi/clover /boot/efi/EFI/
+echo -e "$current_password\n" | sudo -S cp custom/config.plist /boot/efi/EFI/clover/config.plist 
+echo -e "$current_password\n" | sudo -S cp -Rf custom/themes/* /boot/efi/EFI/clover/themes
 
 # delete temp directories created and delete the Clover ISO
 echo -e "$current_password\n" | sudo -S umount ~/temp-clover
@@ -131,12 +131,12 @@ done
 
 # install Clover to the EFI system partition
 echo -e "$current_password\n" | sudo -S efibootmgr -c -d /dev/nvme0n1 -p 1 -L "Clover - GUI Boot Manager" -l "\EFI\clover\cloverx64.efi" &> /dev/null
-echo -e "$current_password\n" | sudo -S mv /esp/efi/boot/bootx64.efi /esp/efi/boot/bootx64.efi.orig 
-echo -e "$current_password\n" | sudo -S cp /esp/efi/clover/cloverx64.efi /esp/efi/boot/bootx64.efi
+echo -e "$current_password\n" | sudo -S mv /boot/efi/EFI/boot/bootx64.efi /boot/efi/EFI/boot/bootx64.efi.orig 
+echo -e "$current_password\n" | sudo -S cp /boot/efi/EFI/clover/cloverx64.efi /boot/efi/EFI/boot/bootx64.efi
 
 # Backup and disable the Windows EFI entry!
-echo -e "$current_password\n" | sudo -S cp /esp/efi/Microsoft/Boot/bootmgfw.efi /esp/efi/Microsoft/Boot/bootmgfw.efi.orig &> /dev/null
-echo -e "$current_password\n" | sudo -S mv /esp/efi/Microsoft/Boot/bootmgfw.efi /esp/efi/Microsoft &> /dev/null
+echo -e "$current_password\n" | sudo -S cp /boot/efi/EFI/Microsoft/Boot/bootmgfw.efi /boot/efi/EFI/Microsoft/Boot/bootmgfw.efi.orig &> /dev/null
+echo -e "$current_password\n" | sudo -S mv /boot/efi/EFI/Microsoft/Boot/bootmgfw.efi /boot/efi/EFI/Microsoft &> /dev/null
 
 # re-arrange the boot order and make Clover the priority!
 echo -e "$current_password\n" | sudo -S efibootmgr -n $CLOVER &> /dev/null
